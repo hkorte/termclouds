@@ -38,7 +38,7 @@ app.directive('termcloud', ['$window', '$timeout', function ($window, $timeout) 
 					clearTimeout(renderTimeout);
 				}
 
-				var $canvas = jQuery(ele[0])
+				var $canvas = jQuery(ele[0]);
 				$canvas.attr('width', Math.floor($canvas.width()));
 				$canvas.attr('height', Math.floor($canvas.width() * 0.65));
 

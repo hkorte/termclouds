@@ -5,6 +5,7 @@
 	<title>Elasticsearch Term Clouds</title>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/app.css"/>
+	<link rel="stylesheet" href="css/spinner.css"/>
 </head>
 <body>
 
@@ -33,7 +34,14 @@
 					</div>
 					<div class="form-group">
 						<label for="query">Query</label>
-						<textarea ng-model="query" class="form-control" id="query" style="height: 15em;"></textarea>
+						<textarea ng-model="query" class="form-control" id="query" style="height: 12em;"></textarea>
+					</div>
+					<div class="form-group">
+						<input type="checkbox" ng-model="backgroundFilterChecked" ng-disabled="!backgroundFilterSupported" class="pull-right">
+						<span ng-show="!backgroundFilterSupported" class="pull-right" style="color: gray">ES>=1.2.0</span>
+						<label for="bgFilter">Background Filter</label>
+						<textarea ng-model="backgroundFilter" class="form-control" id="bgFilter" ng-disabled="!backgroundFilterChecked"
+								style="height: 10em;" disa></textarea>
 					</div>
 					<button type="submit" class="btn btn-default">Submit</button>
 				</form>
@@ -48,11 +56,25 @@
 			<!--</div>-->
 		<!--</div>-->
 	<!--</div>-->
-	<div class="col-md-9">
-		<div class="panel panel-default" ng-show="results.length > 0">
-			<div class="panel-heading">Whoomp! There it is!</div>
-			<div class="panel-body">
-				<canvas termcloud data="results" termclick="termclick" style="width: 100%"></canvas>
+	<div class="col-md-9" ng-show="state!='initial'">
+		<div ng-switch="state">
+			<div ng-switch-when="searching" class="panel panel-default">
+				<div class="panel-heading">Whoomp! There it is!</div>
+				<div class="panel-body">
+					<div spinner></div>
+				</div>
+			</div>
+			<div ng-switch-when="error" class="panel panel-default">
+				<div class="panel-heading" style="color: red">Error</div>
+				<div class="panel-body" style="font-family: monospace;">
+					{{errorMsg}}
+				</div>
+			</div>
+			<div ng-switch-when="finished" class="panel panel-default">
+				<div class="panel-heading">Whoomp! There it is!</div>
+				<div class="panel-body">
+					<canvas ng-show="results.length > 0" termcloud data="results" termclick="termclick" style="width: 100%"></canvas>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -66,5 +88,6 @@
 <script src="js/app.js"></script>
 <script src="js/controllers/main.js"></script>
 <script src="js/directives/termcloud.js"></script>
+<script src="js/directives/spinner.js"></script>
 </body>
 </html>
